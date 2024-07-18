@@ -12,3 +12,7 @@
 .fade-zoom {
   animation: crossfade 1s ease-in-out;
 }
+
+.bg_bg {
+  backdrop-filter: blur(2px);
+}

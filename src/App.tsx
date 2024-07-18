@@ -22,13 +22,13 @@ function App() {
       {location.pathname !== "/AdminPage" && (
         <>
           <MenuLayout />
-          {/* <Animation /> */}
-          <Container>
+          <Animation />
+          {/* <Container>
             <Filter />
             <Cards />
             <News />
             <Footer />
-          </Container>
+          </Container> */}
         </>
       )}
     </div>
