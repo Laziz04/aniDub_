@@ -96,7 +96,7 @@ const Navbar = () => {
   };
 
   const goToProfile = () => {
-    handleCloseprofil(); // Close profile modal
+    handleCloseprofil();
     setTimeout(() => {
       navigate("/profil");
     }, 0);
@@ -223,6 +223,8 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
         </div>
       )}
 
+      {/* logout modal */}
+
       <Modal
         open={openprofil}
         onClose={handleClose}
@@ -266,28 +268,17 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
                 backgroundPosition: "center",
               }}
             />
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
+            <input
+              className="input_style"
+              type="text"
+              placeholder="Ismingizni kiriting..."
               value={name}
               onChange={(e) => setName(e.target.value)}
-              sx={{
-                marginBottom: "1rem",
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-              }}
             />
-            <TextField
-              label="Telefon"
-              type="tel"
-              variant="outlined"
-              fullWidth
+            <input
+              className="input_style"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              sx={{
-                marginBottom: "1rem",
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-              }}
             />
 
             <Button
@@ -296,36 +287,78 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
               fullWidth
               onClick={handleSubmit}
               sx={{
-                marginBottom: "1rem",
                 background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+                borderRadius: "8px",
+                border: "none",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                color: "#fff",
+                cursor: "pointer",
+                display: "inline-block",
+                fontSize: "16px",
+                fontWeight: "bold",
+                lineHeight: "1",
+                outline: "none",
+                overflow: "hidden",
+                padding: "12px 24px",
+                position: "relative",
+                textDecoration: "none",
+                transition:
+                  "background-color 0.3s, transform 0.3s, box-shadow 0.3s",
+
+                "&:before, &:after": {
+                  content: '""',
+                  position: "absolute",
+                  top: "0",
+                  left: "0",
+                  width: "100%",
+                  height: "100%",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  transition: "transform 0.3s",
+                  zIndex: "-1",
+                },
+
+                "&:hover": {
+                  backgroundColor: "#ff4b2b",
+                  boxShadow: "0 8px 12px rgba(0, 0, 0, 0.2)",
+                  transform: "translateY(-2px)",
+
+                  "&:before": {
+                    transform:
+                      "translate3d(10px, 10px, -20px) rotateX(20deg) rotateY(-15deg) rotateZ(0deg)",
+                  },
+
+                  "&:after": {
+                    transform:
+                      "translate3d(-10px, -10px, -20px) rotateX(-10deg) rotateY(15deg) rotateZ(0deg)",
+                  },
+                },
               }}
             >
               Send
             </Button>
-            <Typography variant="body2" color="textSecondary" align="center">
+
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="mt-2"
+              align="center"
+            >
               Yoki
             </Typography>
-            <div className="flex justify-center mt-2 gap-2">
+            <div className="flex justify-center mt-3 gap-2 w-full">
               <Button
                 variant="outlined"
                 startIcon={<GoogleIcon />}
-                sx={{ borderColor: "red", color: "red" }}
+                sx={{ borderColor: "red", color: "red", width: "50%" }}
               >
                 Google
               </Button>
               <Button
                 variant="outlined"
                 startIcon={<AppleIcon />}
-                sx={{ borderColor: "black", color: "black" }}
+                sx={{ borderColor: "black", color: "black", width: "50%" }}
               >
                 Apple
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<FacebookIcon />}
-                sx={{ borderColor: "blue", color: "blue" }}
-              >
-                Facebook
               </Button>
             </div>
             <Typography
@@ -339,6 +372,8 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
           </Box>
         </Box>
       </Modal>
+
+      {/* profil modal */}
 
       <Modal
         open={openprofila}
