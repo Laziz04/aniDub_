@@ -1,0 +1,14 @@
+@keyframes crossfade {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-zoom {
+  animation: crossfade 1s ease-in-out;
+}

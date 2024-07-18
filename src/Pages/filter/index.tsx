@@ -1,8 +1,14 @@
+import { Box, Container } from "@mui/material";
+
 const Filter = () => {
   return (
-    <div>
+    <Box
+      sx={{
+        marginTop: "500px",
+      }}
+    >
       <h1>Menu_Filter</h1>
-    </div>
+    </Box>
   );
 };
 
