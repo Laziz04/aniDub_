@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { FaBars } from "react-icons/fa";
-import logo from "./img/aniDub_logo.png";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaBars, FaUser } from "react-icons/fa";
 import { RiSearchLine } from "react-icons/ri";
 import { TbLogin2 } from "react-icons/tb";
+import logo from "./img/aniDub_logo.png";
 import bars from "./img/bars.png";
-import { FaUser } from "react-icons/fa";
+import user from "./img/user.png";
+import exit from "./img/off.png";
 import {
   Modal,
   Box,
@@ -19,7 +21,6 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import CloseIcon from "@mui/icons-material/Close";
 import "./menu.css";
 
-// Modal styles
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -42,21 +43,33 @@ const backdropStyle = {
   backdropFilter: "blur(10px)",
 };
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSearchInput, setShowSearchInput] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openprofil, setOpenModal] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("+998");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [openprofil, setOpenProfil] = useState(false);
+  const [openprofila, setOpenProfila] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("name");
+    const storedPhone = localStorage.getItem("phone");
+
+    if (storedName && storedPhone) {
+      setName(storedName);
+      setPhone(storedPhone);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleopenprofil = () => {
-    setOpenProfil(true);
+    setOpenProfila(true);
   };
 
   const handleCloseprofil = () => {
-    setOpenProfil(false);
+    setOpenProfila(false);
   };
 
   const handleOpen = () => setOpenModal(true);
@@ -64,11 +77,29 @@ const Navbar: React.FC = () => {
 
   const handleSubmit = () => {
     if (name && !isNaN(Number(phone))) {
+      localStorage.setItem("name", name);
+      localStorage.setItem("phone", phone);
       setIsLoggedIn(true);
       handleClose();
     } else {
       alert("Please enter a valid name and phone number.");
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("name");
+    localStorage.removeItem("phone");
+    setIsLoggedIn(false);
+    setName("");
+    setPhone("+998");
+    handleCloseprofil();
+  };
+
+  const goToProfile = () => {
+    handleCloseprofil(); // Close profile modal
+    setTimeout(() => {
+      navigate("/profil");
+    }, 0);
   };
 
   return (
@@ -123,6 +154,7 @@ const Navbar: React.FC = () => {
                 style={{
                   width: "120px",
                 }}
+                onClick={handleopenprofil}
                 className="flex items-center justify-start gap-2 px-4 py-2 text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
               >
                 <FaUser />
@@ -181,6 +213,7 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
               style={{
                 width: "120px",
               }}
+              onClick={handleopenprofil}
               className="flex items-center justify-start gap-2 px-4 py-2 text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
             >
               <FaUser />
@@ -191,7 +224,7 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
       )}
 
       <Modal
-        open={openModal}
+        open={openprofil}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -267,27 +300,95 @@ md:hidden px-2 pt-2 pb-3 space-y-1"
                 background: "linear-gradient(to right, #ff416c, #ff4b2b)",
               }}
             >
-              Sign in
+              Send
             </Button>
+            <Typography variant="body2" color="textSecondary" align="center">
+              Yoki
+            </Typography>
+            <div className="flex justify-center mt-2 gap-2">
+              <Button
+                variant="outlined"
+                startIcon={<GoogleIcon />}
+                sx={{ borderColor: "red", color: "red" }}
+              >
+                Google
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<AppleIcon />}
+                sx={{ borderColor: "black", color: "black" }}
+              >
+                Apple
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<FacebookIcon />}
+                sx={{ borderColor: "blue", color: "blue" }}
+              >
+                Facebook
+              </Button>
+            </div>
             <Typography
               variant="body2"
-              sx={{ color: "white", textAlign: "center", marginBottom: "1rem" }}
+              color="textSecondary"
+              align="center"
+              sx={{ marginTop: "1rem" }}
             >
-              Or continue with
+              Bu orqali tizimga kirishingiz mumkin
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                gap: 2,
-                marginBottom: "1rem",
-              }}
-            >
-              <Button startIcon={<GoogleIcon />} variant="outlined" />
-              <Button startIcon={<AppleIcon />} variant="outlined" />
-              <Button startIcon={<FacebookIcon />} variant="outlined" />
-            </Box>
           </Box>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openprofila}
+        onClose={handleCloseprofil}
+        BackdropProps={{
+          style: {
+            backgroundColor: "transparent",
+          },
+        }}
+      >
+        <Box
+          className=" text-teal-500 bg-gray-100 rounded-lg shadow-md"
+          sx={{
+            position: "absolute",
+            top: "58px",
+            right: "10px",
+            border: "none",
+            backgroundColor: "white",
+            borderRadius: "15px",
+            width: "10%",
+            height: "max-content",
+            padding: "16px",
+          }}
+        >
+          <p>{name}</p>
+          <hr />
+          <button className="flex gap-2" onClick={goToProfile}>
+            <img
+              style={{
+                width: "30px",
+                height: "30px",
+                objectFit: "cover",
+              }}
+              src={user}
+              alt=""
+            />
+            <p>Profil</p>
+          </button>
+          <button className="flex gap-2" onClick={handleLogout}>
+            <img
+              style={{
+                width: "30px",
+                height: "30px",
+                objectFit: "cover",
+              }}
+              src={exit}
+              alt=""
+            />
+            <p>Chiqish</p>
+          </button>
         </Box>
       </Modal>
     </nav>
