@@ -3,7 +3,8 @@
   display: flex;
   justify-content: center;
   padding: 5px;
-  width: 100%;
+  max-width: 290px !important;
+  width: 200px;
   height: 40px;
   opacity: 0px;
   color: #00d3e1;
@@ -40,4 +41,22 @@
 
 .nefr {
   width: 700px;
+}
+
+@media screen and (max-width: 1900px) {
+  .respon {
+    padding: 0px 132px 0px 112px;
+  }
+}
+
+@media screen and (max-width: 1360px) {
+  .respon {
+    padding: 0px 92px 0px 99px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .respon {
+    padding: 0px 12px 0px 18px;
+  }
 }

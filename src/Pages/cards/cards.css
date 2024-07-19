@@ -1,0 +1,140 @@
+.section_card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  overflow: hidden;
+  border-radius: 7px;
+  transition: transform 0.3s ease;
+  -webkit-box-shadow: 12px 5px 12px -1px rgba(34, 37, 39, 0.2);
+  -moz-box-shadow: 12px 5px 12px -1px rgba(34, 37, 39, 0.2);
+  box-shadow: 12px 5px 12px -1px rgba(34, 37, 39, 0.2);
+}
+
+.section_card:hover {
+  transform: scale(1.02); /* Rasm cattalashganda 2% kattalash */
+}
+
+.card-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 35%;
+  background: rgba(0, 0, 0, 0.286);
+  color: white !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  padding: 10px !important;
+  transform: translateY(100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index: 1;
+}
+
+.section_card:hover .card-body {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Rasm cattalashganda animatsiya */
+}
+
+.section_card:hover .card-image {
+  transform: scale(1.1); /* Rasm cattalashganda 10% kattalash */
+}
+
+.card-text {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: absolute;
+  left: 8px;
+}
+
+.section_card:hover .card-text {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.card_span {
+  position: absolute;
+  width: 60px;
+  height: 26px;
+  top: 6px;
+  left: 6px;
+  color: white;
+  background-color: #f29824;
+  border-radius: 4px;
+  padding-top: 2px;
+  text-align: center;
+  z-index: 2;
+  font-size: 14px;
+}
+
+.card_span2 {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 7px;
+  z-index: 2;
+}
+
+.card_span3 {
+  position: absolute;
+  bottom: 20px;
+  background: transparent;
+  color: white;
+  border-top: 2px solid #fff;
+  width: 100%;
+  padding-top: 10px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+.card_span4 {
+  position: absolute;
+  bottom: 18px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+.buuton_hover {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  padding: 5px 5px;
+
+  width: 100%;
+  height: 40px;
+  opacity: 0px;
+  color: #00d3e1;
+  border: 2px solid #00d3e1;
+  border-radius: 8px;
+}
+.buuton_hover:hover {
+  color: #ffffff;
+  background: #00d3e1;
+  transition: 0.2s;
+}
+
+@media screen and (max-width: 1900px) {
+  .respons {
+    padding: 0px 48px 0px 56px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .respons {
+    padding: 0px 12px 0px 18px;
+  }
+}

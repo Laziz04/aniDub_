@@ -36,8 +36,13 @@ const Slider = () => {
   const slide = slides[currentSlide] || {};
 
   return (
-    <div className="flex flex-col items-center px-3 bg-background-filter">
-      <div className="relative w-full max-w-4xl h-80 md:h-[32rem] text-white">
+    <div
+      style={{
+        marginLeft: "15px",
+      }}
+      className="flex flex-col items-center repons bg-background-filter mt-2"
+    >
+      <div className="relative w-full   max-w-9xl h-80 md:h-[32rem] text-white">
         <div className="relative w-full h-full">
           <img
             style={{
@@ -67,29 +72,22 @@ const Slider = () => {
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 hidden md:flex">
           {slides.slice(0, 5).map((slide, index) => (
             <img
+              style={{
+                outline: "none",
+                width: "100px",
+                height: "100px",
+              }}
               key={index}
               src={slide.img}
               alt={slide.name}
-              className={`w-16 h-16 object-cover  rounded-lg cursor-pointer ${
+              className={`object-cover  rounded-lg cursor-pointer ${
                 index === currentSlide ? "ring-2 ring-blue-600" : ""
               }`}
               onClick={() => setCurrentSlide(index)}
             />
           ))}
         </div>
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 flex-wrap md:hidden">
-          {slides.slice(0, 5).map((slide, index) => (
-            <img
-              key={index}
-              src={slide.img}
-              alt={slide.name}
-              className={`w-12 h-12 object-cover rounded-lg cursor-pointer ${
-                index === currentSlide ? "ring-2 ring-blue-600" : ""
-              }`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
-        </div>
+        \
       </div>
     </div>
   );

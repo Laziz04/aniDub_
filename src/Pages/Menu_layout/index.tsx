@@ -105,13 +105,13 @@ const Navbar = () => {
 
   return (
     <nav className="">
-      <div className="pe-5 sm:px-6 lg:px-8">
+      <div className="respons">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <img
                 style={{
-                  width: "160px",
+                  width: "120px",
                 }}
                 src={logo}
                 alt="Logo"

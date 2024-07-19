@@ -32,8 +32,8 @@ function App() {
         <>
           <Animation />
           <Filter />
+          <Cards />
           {/* <Container>
-            <Cards />
             <News />
             <Footer />
           </Container> */}

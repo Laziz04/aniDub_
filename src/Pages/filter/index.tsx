@@ -1,26 +1,21 @@
 import { FaChevronRight } from "react-icons/fa";
 import "./section_filter.css";
+import { Box } from "@mui/material";
 
 const Filter = () => {
   return (
-    <div className=" container mt-5 ">
-      <div className="felx_wrap flex  justify-between w-100">
-        <div className="row nefr ">
-          <div className="col-4">
-            <button className=" Filter_button">Hamma anemelar</button>
-          </div>
-          <div className="col-4">
-            <button className=" Filter_button">Yakunlangan Animelar</button>
-          </div>
-          <div className="col-4">
-            <button className=" Filter_button">Ani Filimlar</button>
-          </div>
+    <Box className=" mt-14 respon">
+      <div className=" flex items-center gap-3 justify-between ">
+        <div className="flex gap-3 ">
+          <button className=" Filter_button">Hamma anemelar</button>
+          <button className=" Filter_button">Yakunlangan Animelar</button>
+          <button className=" Filter_button">Ani Filimlar</button>
         </div>
         <button className="flex items-center gap-1 Filter_button1">
           Barchasi <FaChevronRight />
         </button>
       </div>
-    </div>
+    </Box>
   );
 };
 
