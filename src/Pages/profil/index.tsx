@@ -80,7 +80,12 @@ const Profil: React.FC = () => {
   const name = localStorage.getItem("name") || "User";
   const storedPhone = localStorage.getItem("phone");
   const [openModal, setOpenModal] = useState(false);
-  const balans = "0 So'm";
+  const [openModalsend, setOpenModalsend] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
+  const [editableName, setEditableName] = useState(name);
+  const [editablePhone, setEditablePhone] = useState(storedPhone || "");
+  const [balans, setBalans] = useState("0 So'm");
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -88,6 +93,14 @@ const Profil: React.FC = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleOpenModalset = () => {
+    setOpenModalsend(true);
+  };
+
+  const handleCloseModalset = () => {
+    setOpenModalsend(false);
   };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
@@ -120,6 +133,13 @@ const Profil: React.FC = () => {
   useEffect(() => {
     localStorage.setItem("selectedImage", selectedImage);
   }, [selectedImage]);
+
+  const handleSave = () => {
+    localStorage.setItem("name", editableName);
+    localStorage.setItem("phone", editablePhone);
+    setIsEditingName(false);
+    setIsEditingPhone(false);
+  };
 
   return (
     <Box className="p-5">
@@ -209,17 +229,61 @@ const Profil: React.FC = () => {
                   }}
                 >
                   <Tab label="Profil" value="1" />
-                  <Tab label="Sevimlilar" value="2" />
-                  <Tab label="Galeriya" value="3" />
+                  <Tab label="Tariflar" value="2" />
+                  <Tab label="Sevimlilar" value="3" />
+                  <Tab label="Galeriya" value="4" />
                 </TabList>
               </Box>
+              <TabPanel value="2">
+                <Box className=" flex gap-10 flex-wrap mt-10">
+                  <div className="tariflar_box">
+                    <span>1 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>200 so'm</h4>
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>2 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>300 so'm</h4>
+                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>3 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>400 so'm</h4>
+                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>4 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>500 so'm</h4>
+                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                </Box>
+              </TabPanel>
               <TabPanel value="1">
-                <Box className=" flex gap-2 items-center">
+                <Box className="flex gap-2 items-center">
                   <Box
                     className="boxShadow"
                     sx={{
                       width: "200px",
-                      height: "240px",
+                      height: "210px",
                       backgroundImage: `url(${selectedProfilImage})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
@@ -268,22 +332,77 @@ const Profil: React.FC = () => {
                     style={{
                       flexDirection: "column",
                     }}
-                    className=" mt-2  w-12  flex gap-2"
+                    className="w-12 flex gap-2"
                   >
-                    <button className=" button_text">
-                      Ism : <span>{name}</span>
-                    </button>
-                    <button className=" button_text">
-                      Tel : {storedPhone}
-                    </button>
+                    {isEditingName ? (
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="text"
+                          value={editableName}
+                          onChange={(e) => setEditableName(e.target.value)}
+                          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors duration-300"
+                          placeholder="Enter your name"
+                        />
+                        <button
+                          onClick={handleSave}
+                          className="bg-teal-500 text-white rounded-md px-4 py-2 hover:bg-teal-600 transition-colors duration-300"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setIsEditingName(false)}
+                          className="bg-gray-300 text-black rounded-md px-4 py-2 hover:bg-gray-400 transition-colors duration-300"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="button_text flex items-center gap-1 text-teal-500 hover:underline"
+                        onClick={() => setIsEditingName(true)}
+                      >
+                        Ism : <span>{editableName}</span>
+                      </button>
+                    )}
 
-                    <button className=" button_text">Balans : {balans}</button>
-                    <button className=" button_text">Hisobni To'ldirish</button>
+                    {isEditingPhone ? (
+                      <div className="flex gap-2 items-center mt-2">
+                        <input
+                          type="text"
+                          value={editablePhone}
+                          onChange={(e) => setEditablePhone(e.target.value)}
+                          className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors duration-300"
+                          placeholder="Enter your phone number"
+                        />
+                        <button
+                          onClick={handleSave}
+                          className="bg-teal-500 text-white rounded-md px-4 py-2 hover:bg-teal-600 transition-colors duration-300"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setIsEditingPhone(false)}
+                          className="bg-gray-300 text-black rounded-md px-4 py-2 hover:bg-gray-400 transition-colors duration-300"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="button_text flex items-center gap-1 text-teal-500 hover:underline mt-2"
+                        onClick={() => setIsEditingPhone(true)}
+                      >
+                        Tel : {editablePhone}
+                      </button>
+                    )}
+
+                    <button className="button_text">Balans : {balans}</button>
+                    <button className="button_text">Hisobni To'ldirish</button>
                   </div>
                 </Box>
               </TabPanel>
-              <TabPanel value="2">Sevimlilar sahifasi</TabPanel>
-              <TabPanel value="3">
+              <TabPanel value="3">Sevimlilar sahifasi</TabPanel>
+              <TabPanel value="4">
                 <Box
                   sx={{
                     display: "flex",
@@ -307,6 +426,53 @@ const Profil: React.FC = () => {
           </div>
         </Box>
       </Box>
+
+      {/* obuna bolsih modal */}
+
+      <Modal
+        style={{
+          marginTop: "220px",
+        }}
+        show={openModalsend}
+        onHide={handleCloseModalset}
+      >
+        <div
+          style={{
+            width: "390px",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            padding: "20px",
+            display: "flex",
+          }}
+        >
+          <div>
+            <div className=" flex justify-between items-center w-full">
+              <h5 className=" text-start">Obuna bo'lishni tasdiqlang</h5>
+              <button
+                onClick={handleCloseModalset}
+                className="text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
+              >
+                x
+              </button>
+            </div>
+            <div
+              style={{
+                flexDirection: "column",
+              }}
+              className=" flex gap-3 mt-4 justify-center"
+            >
+              <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 tariflar_button  w-full">
+                Bekor qilish
+              </button>
+              <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 tariflar_button w-full ">
+                Obuna Bo'lish
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* profil img modal */}
 
       <Modal show={openModal} onHide={handleCloseModal}>
         <Box

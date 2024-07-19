@@ -3,9 +3,9 @@
   display: flex;
   justify-content: center;
   padding: 5px;
-  max-width: 290px !important;
-  width: 200px;
-  height: 40px;
+  width: auto;
+  height: auto;
+  padding: 5px 10px 5px 10px;
   opacity: 0px;
   color: #00d3e1;
   border: 2px solid #00d3e1;
@@ -45,7 +45,7 @@
 
 @media screen and (max-width: 1900px) {
   .respon {
-    padding: 0px 132px 0px 112px;
+    padding: 0px 102px 0px 123px;
   }
 }
 

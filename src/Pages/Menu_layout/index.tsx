@@ -75,12 +75,31 @@ const Navbar = () => {
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
-  const handleSubmit = () => {
-    if (name && !isNaN(Number(phone))) {
-      localStorage.setItem("name", name);
-      localStorage.setItem("phone", phone);
-      setIsLoggedIn(true);
-      handleClose();
+  const handleSubmit = async () => {
+    if (name && phone.length >= 10 && !isNaN(Number(phone))) {
+      try {
+        const response = await fetch(
+          "https://6d548820c3f18dbd.mokky.dev/access",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, phone }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to save data to the API");
+        }
+
+        localStorage.setItem("name", name);
+        localStorage.setItem("phone", phone);
+        setIsLoggedIn(true);
+        handleClose();
+      } catch (error) {
+        alert("Failed to save data to the API");
+      }
     } else {
       alert("Please enter a valid name and phone number.");
     }
