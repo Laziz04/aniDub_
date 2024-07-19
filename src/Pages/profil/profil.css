@@ -1,0 +1,23 @@
+.profil-img {
+  box-shadow: 10px 10px 10px 0px rgba(34, 60, 80, 0.2);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.button_text {
+  text-align: left;
+  padding-left: 20px;
+  width: 180px;
+  height: 45px;
+  opacity: 0px;
+  box-shadow: 3px 5px 9.2px 0px #00000040;
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.boxShadow {
+  box-shadow: 3px -2px 7.6px 0px #00000040;
+}

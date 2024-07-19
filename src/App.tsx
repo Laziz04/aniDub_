@@ -31,8 +31,8 @@ function App() {
       {location.pathname !== "/AdminPage" && location.pathname !== "/profil" && (
         <>
           <Animation />
+          <Filter />
           {/* <Container>
-            <Filter />
             <Cards />
             <News />
             <Footer />

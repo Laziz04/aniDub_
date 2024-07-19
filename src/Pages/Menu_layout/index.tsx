@@ -93,6 +93,7 @@ const Navbar = () => {
     setName("");
     setPhone("+998");
     handleCloseprofil();
+    navigate("/");
   };
 
   const goToProfile = () => {
@@ -104,7 +105,7 @@ const Navbar = () => {
 
   return (
     <nav className="">
-      <div className="pe-3 sm:px-6 lg:px-8">
+      <div className="pe-5 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -155,7 +156,7 @@ const Navbar = () => {
                   width: "120px",
                 }}
                 onClick={handleopenprofil}
-                className="flex items-center justify-start gap-2 px-4 py-2 text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
+                className="flex items-center justify-start gap-2 px-4 py-2 text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 profil_menu"
               >
                 <FaUser />
                 Profil
