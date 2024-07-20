@@ -39,3 +39,38 @@
   background: transparent;
   border: none;
 }
+
+.button-3d {
+  background-color: #ffffff;
+  color: #38b2ac;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px #cbd5e0;
+  transition: all 0.3s ease;
+}
+
+.button-3d:hover {
+  background-color: #f7fafc;
+  box-shadow: 0 2px #cbd5e0;
+  transform: translateY(2px);
+}
+
+.button-3d:active {
+  background-color: #edf2f7;
+  box-shadow: 0 1px #cbd5e0;
+  transform: translateY(3px);
+}
+
+.tolov_turi {
+  box-shadow: 1px 3px 5.4px -1px #00f0ff;
+  width: 92px;
+  height: 74px;
+  top: 230px;
+  left: 100px;
+  gap: 0px;
+  border-radius: 15px 0px 0px 0px;
+  opacity: 0px;
+}

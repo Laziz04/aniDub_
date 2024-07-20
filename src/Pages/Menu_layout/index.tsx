@@ -177,7 +177,14 @@ const Navbar = () => {
                 onClick={handleopenprofil}
                 className="flex items-center justify-start gap-2 px-4 py-2 text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 profil_menu"
               >
-                <FaUser />
+                <img
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                  }}
+                  src={user}
+                  alt=""
+                />
                 Profil
               </button>
             )}

@@ -6,13 +6,13 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./App.css";
-import MenuLayout from "./Pages/Menu_layout";
 import Animation from "./Pages/animation";
 import Filter from "./Pages/filter";
 import Cards from "./Pages/cards";
 import News from "./Pages/news";
 import Footer from "./Pages/footer";
-import AdminPage from "./Pages/admen_page";
+import Admin from "./Pages/admen_page";
+import Ad from "./Pages/admen_page/adminpage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "@mui/material";
 import Navbar from "./Pages/Menu_layout/index";
@@ -23,32 +23,33 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar />
-      <Routes>
-        <Route path="/AdminPage" element={<Home />} />
-        <Route path="/profil" element={<Profil />} />
-      </Routes>
-      {location.pathname !== "/AdminPage" && location.pathname !== "/profil" && (
-        <>
-          <Animation />
-          <Filter />
-          <Cards />
-          {/* <Container>
-            <News />
-            <Footer />
-          </Container> */}
-        </>
+      {location.pathname !== "/AdminPage" && location.pathname !== "/Ad" && (
+        <Navbar />
       )}
+      <Routes>
+        <Route path="/AdminPage" element={<Admin />} />
+        <Route path="/Ad" element={<Ad />} />
+        <Route path="/profil" element={<Profil />} />
+        <Route
+          path="/"
+          element={
+            location.pathname === "/" &&
+            !["/AdminPage", "/Ad", "/profil"].includes(location.pathname) ? (
+              <>
+                <Animation />
+                <Filter />
+                <Cards />
+                <Container>
+                  <News />
+                  <Footer />
+                </Container>
+              </>
+            ) : null
+          }
+        />
+      </Routes>
     </div>
   );
 }
-
-const Home = () => {
-  return (
-    <div>
-      <AdminPage />
-    </div>
-  );
-};
 
 export default App;

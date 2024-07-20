@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Box } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -7,8 +9,13 @@ import TabPanel from "@mui/lab/TabPanel";
 import Modal from "react-bootstrap/Modal";
 import Component from "./components";
 import "./profil.css";
-import { Button } from "react-bootstrap";
 import { GoPlus } from "react-icons/go";
+import { HiMiniXMark } from "react-icons/hi2";
+import { click } from "@testing-library/user-event/dist/click";
+import clik from "./clik.png";
+import payme from "./payme.png";
+import uzum from "./uzum.png";
+import hr from "./hr.png";
 
 const Profil: React.FC = () => {
   const [value, setValue] = useState<string>("1");
@@ -86,6 +93,16 @@ const Profil: React.FC = () => {
   const [editableName, setEditableName] = useState(name);
   const [editablePhone, setEditablePhone] = useState(storedPhone || "");
   const [balans, setBalans] = useState("0 So'm");
+  const [balance, setBalance] = useState(0);
+  const [openModalmoney, setOpenModalmoney] = useState(false);
+
+  const handleCloseModalmoney = () => {
+    setOpenModalmoney(false);
+  };
+
+  const handleOpenModalmoney = () => {
+    setOpenModalmoney(true);
+  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -101,6 +118,14 @@ const Profil: React.FC = () => {
 
   const handleCloseModalset = () => {
     setOpenModalsend(false);
+  };
+
+  const handleSubscription = () => {
+    if (balance <= 0) {
+      toast.error("Obuna bo'lish uchun balansda mablag' yetarli emas");
+    } else {
+      toast.success("Obuna muvaffaqiyatli bo'ldi!");
+    }
   };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
@@ -252,7 +277,10 @@ const Profil: React.FC = () => {
                     <span>2 Oylik</span>
                     <div className=" flex gap-3 items-center mt-1">
                       <h4>300 so'm</h4>
-                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
                         Obuna
                       </button>
                     </div>
@@ -261,7 +289,10 @@ const Profil: React.FC = () => {
                     <span>3 Oylik</span>
                     <div className=" flex gap-3 items-center mt-1">
                       <h4>400 so'm</h4>
-                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
                         Obuna
                       </button>
                     </div>
@@ -270,7 +301,10 @@ const Profil: React.FC = () => {
                     <span>4 Oylik</span>
                     <div className=" flex gap-3 items-center mt-1">
                       <h4>500 so'm</h4>
-                      <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button">
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
                         Obuna
                       </button>
                     </div>
@@ -397,7 +431,12 @@ const Profil: React.FC = () => {
                     )}
 
                     <button className="button_text">Balans : {balans}</button>
-                    <button className="button_text">Hisobni To'ldirish</button>
+                    <button
+                      onClick={handleOpenModalmoney}
+                      className="button_text"
+                    >
+                      Hisobni To'ldirish
+                    </button>
                   </div>
                 </Box>
               </TabPanel>
@@ -427,6 +466,51 @@ const Profil: React.FC = () => {
         </Box>
       </Box>
 
+      {/* balansni toldirish */}
+      <Modal
+        style={{
+          marginTop: "220px",
+          borderRadius: "12px",
+          boxShadow:
+            "0px 4px 8px rgba(0, 0, 0, 0.1), 0px 0px 10px rgba(0, 0, 0, 0.1)",
+        }}
+        show={openModalmoney}
+        onHide={handleCloseModalmoney}
+      >
+        <div
+          style={{
+            width: "400px",
+          }}
+          className="p-6 bg-white rounded-lg shadow-lg"
+        >
+          <div className="flex justify-between items-center">
+            <h4 className="text-lg font-semibold">
+              <span>Ba</span>lansni to’ldirish
+            </h4>
+            <button
+              style={{
+                marginTop: "-8px",
+              }}
+              onClick={handleCloseModalmoney}
+              className="text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition"
+            >
+              <HiMiniXMark />
+            </button>
+          </div>
+          <input
+            type="text"
+            placeholder=" summani kiriting"
+            className="w-full p-2 border rounded-lg shadow-sm mt-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
+          />
+          <img src={hr} alt="" className="w-full h-1 mb-3 mt-3" />
+          <div className="flex items-cente  justify-between">
+            <img src={clik} alt="" className=" w-28 cursor-pointer" />
+            <img src={payme} alt="" className="w-28 cursor-pointer" />
+            <img src={uzum} alt="" className="w-28 cursor-pointer" />
+          </div>
+        </div>
+      </Modal>
+
       {/* obuna bolsih modal */}
 
       <Modal
@@ -442,32 +526,30 @@ const Profil: React.FC = () => {
             backgroundColor: "white",
             borderRadius: "10px",
             padding: "20px",
-            display: "flex",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <div>
-            <div className=" flex justify-between items-center w-full">
-              <h5 className=" text-start">Obuna bo'lishni tasdiqlang</h5>
-              <button
-                onClick={handleCloseModalset}
-                className="text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
-              >
-                x
-              </button>
-            </div>
-            <div
-              style={{
-                flexDirection: "column",
-              }}
-              className=" flex gap-3 mt-4 justify-center"
+          <div className="flex justify-between items-center w-full">
+            <h5 className="text-start">Obuna Bo'lishni tasdiqlang</h5>
+            <button
+              onClick={handleCloseModalset}
+              className="text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
             >
-              <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 tariflar_button  w-full">
-                Bekor qilish
-              </button>
-              <button className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 tariflar_button w-full ">
-                Obuna Bo'lish
-              </button>
-            </div>
+              <HiMiniXMark
+                style={{
+                  fontSize: "22px",
+                  cursor: "pointer",
+                }}
+              />
+            </button>
+          </div>
+          <div className="flex flex-col gap-3 mt-4 justify-center">
+            <button className="button-3d w-full" onClick={handleCloseModalset}>
+              Bekor qilish
+            </button>
+            <button onClick={handleSubscription} className="button-3d w-full">
+              Obuna Bo'lish
+            </button>
           </div>
         </div>
       </Modal>
@@ -515,6 +597,7 @@ const Profil: React.FC = () => {
           ))}
         </Box>
       </Modal>
+      <ToastContainer />
     </Box>
   );
 };
