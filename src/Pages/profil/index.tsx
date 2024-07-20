@@ -16,6 +16,7 @@ import clik from "./clik.png";
 import payme from "./payme.png";
 import uzum from "./uzum.png";
 import hr from "./hr.png";
+import Chat from "../admen_page/chat";
 
 const Profil: React.FC = () => {
   const [value, setValue] = useState<string>("1");
@@ -254,63 +255,12 @@ const Profil: React.FC = () => {
                   }}
                 >
                   <Tab label="Profil" value="1" />
-                  <Tab label="Tariflar" value="2" />
-                  <Tab label="Sevimlilar" value="3" />
-                  <Tab label="Galeriya" value="4" />
+                  <Tab label="Chat" value="2" />
+                  <Tab label="Tariflar" value="3" />
+                  <Tab label="Sevimlilar" value="4" />
+                  <Tab label="Galeriya" value="5" />
                 </TabList>
               </Box>
-              <TabPanel value="2">
-                <Box className=" flex gap-10 flex-wrap mt-10">
-                  <div className="tariflar_box">
-                    <span>1 Oylik</span>
-                    <div className=" flex gap-3 items-center mt-1">
-                      <h4>200 so'm</h4>
-                      <button
-                        onClick={handleOpenModalset}
-                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
-                      >
-                        Obuna
-                      </button>
-                    </div>
-                  </div>
-                  <div className="tariflar_box">
-                    <span>2 Oylik</span>
-                    <div className=" flex gap-3 items-center mt-1">
-                      <h4>300 so'm</h4>
-                      <button
-                        onClick={handleOpenModalset}
-                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
-                      >
-                        Obuna
-                      </button>
-                    </div>
-                  </div>
-                  <div className="tariflar_box">
-                    <span>3 Oylik</span>
-                    <div className=" flex gap-3 items-center mt-1">
-                      <h4>400 so'm</h4>
-                      <button
-                        onClick={handleOpenModalset}
-                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
-                      >
-                        Obuna
-                      </button>
-                    </div>
-                  </div>
-                  <div className="tariflar_box">
-                    <span>4 Oylik</span>
-                    <div className=" flex gap-3 items-center mt-1">
-                      <h4>500 so'm</h4>
-                      <button
-                        onClick={handleOpenModalset}
-                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
-                      >
-                        Obuna
-                      </button>
-                    </div>
-                  </div>
-                </Box>
-              </TabPanel>
               <TabPanel value="1">
                 <Box className="flex gap-2 items-center">
                   <Box
@@ -440,8 +390,65 @@ const Profil: React.FC = () => {
                   </div>
                 </Box>
               </TabPanel>
-              <TabPanel value="3">Sevimlilar sahifasi</TabPanel>
-              <TabPanel value="4">
+              <TabPanel value="2">
+                <Box className=" mt-10">
+                  <Chat name={name} profileImage={selectedProfilImage} />
+                </Box>
+              </TabPanel>
+              <TabPanel value="3">
+                <Box className=" flex gap-10 flex-wrap mt-10">
+                  <div className="tariflar_box">
+                    <span>1 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>200 so'm</h4>
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>2 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>300 so'm</h4>
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>3 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>400 so'm</h4>
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                  <div className="tariflar_box">
+                    <span>4 Oylik</span>
+                    <div className=" flex gap-3 items-center mt-1">
+                      <h4>500 so'm</h4>
+                      <button
+                        onClick={handleOpenModalset}
+                        className=" text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200  tariflar_button"
+                      >
+                        Obuna
+                      </button>
+                    </div>
+                  </div>
+                </Box>
+              </TabPanel>
+              <TabPanel value="4">Sevimlilar sahifasi</TabPanel>
+              <TabPanel value="5">
                 <Box
                   sx={{
                     display: "flex",

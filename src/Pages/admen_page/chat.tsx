@@ -1,120 +1,140 @@
+import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import user from "./user.png"; // Profil rasm yo'li
-import axios from "axios";
 
-interface ChatMessage {
+interface Message {
+  id: string;
   userId: number;
-  userName: string;
-  userProfilePic: string;
-  message: string;
-  timestamp: string;
+  text: string;
+  time: string;
+}
+
+interface ChatProps {
+  name: string;
+  profileImage: string;
 }
 
 const API_URL = "https://6d548820c3f18dbd.mokky.dev/chat";
 
-const Chat: React.FC = () => {
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+const Chat: React.FC<ChatProps> = ({ name, profileImage }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
 
-  // Xabarlarni olish funksiyasi
-  const fetchMessages = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setChatMessages(response.data);
-    } catch (error) {
-      console.error("Failed to fetch messages:", error);
-    }
-  };
-
-  // Sahifa yuklanganda va har 5 soniyada xabarlarni yangilash
+  // Fetch messages from API and local storage
   useEffect(() => {
-    fetchMessages();
-    const intervalId = setInterval(fetchMessages, 5000);
-    return () => clearInterval(intervalId);
+    // Retrieve messages from local storage
+    const savedMessages = localStorage.getItem("messages");
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+
+    // Fetch messages from API
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        setMessages(data);
+        localStorage.setItem("messages", JSON.stringify(data));
+      })
+      .catch((error) => console.error("Failed to fetch messages:", error));
   }, []);
 
-  // Xabarni yuborish funksiyasi
-  const handleSendMessage = async () => {
-    const userName = localStorage.getItem("name") || "Anonymous";
-    const userProfilePic = localStorage.getItem("profilePic") || user;
-    const userId = 1; // Sizning userId qiymati
+  useEffect(() => {
+    // Sync messages with local storage
+    localStorage.setItem("messages", JSON.stringify(messages));
+  }, [messages]);
 
-    if (newMessage.trim()) {
-      const message: ChatMessage = {
-        userId,
-        userName,
-        userProfilePic,
-        message: newMessage,
-        timestamp: new Date().toLocaleTimeString(),
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== "") {
+      const newMsg: Message = {
+        id: (messages.length + 1).toString(), // Unique ID creation
+        userId: 1, // User ID for the current user
+        text: newMessage,
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
 
-      try {
-        await axios.post(API_URL, message);
-        setNewMessage("");
-        fetchMessages(); // Xabar yuborilgandan keyin xabarlarni yangilash
-      } catch (error) {
-        console.error("Failed to send message:", error);
-      }
+      // Update local state and local storage
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
+
+      // Send new message to API
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMsg),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Message sent:", data);
+        })
+        .catch((error) => console.error("Failed to send message:", error));
+
+      setNewMessage(""); // Clear input
     }
   };
 
-  return (
-    <div className="bg-white p-4 rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-4">Chat</h2>
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-y-auto mb-4">
-          <div className="flex flex-col space-y-4">
-            {chatMessages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  msg.userId === 1 ? "justify-end" : "justify-start"
-                } space-x-3`}
-              >
-                {msg.userId === 1 ? (
-                  <div className="flex flex-col items-end">
-                    <div className="bg-blue-100 p-3 rounded-lg">
-                      <p className="text-sm text-right">{msg.message}</p>
-                      <span className="text-xs text-gray-500">
-                        {msg.timestamp}
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-start space-x-3">
-                    <img
-                      src={msg.userProfilePic}
-                      alt={`${msg.userName}'s Avatar`}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div className="bg-gray-100 p-3 rounded-lg">
-                      <p className="text-sm font-medium">{msg.userName}</p>
-                      <p className="text-sm">{msg.message}</p>
-                      <span className="text-xs text-gray-500">
-                        {msg.timestamp}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 border rounded-lg p-2"
+  const renderMessage = (msg: Message) => {
+    const isUserMessage = msg.userId === 1;
+
+    return (
+      <div
+        key={msg.id}
+        className={`flex ${
+          isUserMessage ? "justify-end" : "justify-start"
+        } mb-4`}
+      >
+        {!isUserMessage && (
+          <img
+            src={profileImage}
+            alt={name}
+            className="w-10 h-10 rounded-full mr-3"
           />
-          <button
-            onClick={handleSendMessage}
-            className="bg-blue-500 text-white rounded-lg px-4 py-2"
-          >
-            Send
-          </button>
+        )}
+        <div
+          className={`p-3 rounded-lg ${
+            isUserMessage ? "bg-blue-500 text-white" : "bg-gray-300 text-black"
+          }`}
+          style={{
+            maxWidth: "60%",
+            background: `linear-gradient(to right, ${
+              isUserMessage ? "#1e3a8a" : "#d1d5db"
+            }, ${isUserMessage ? "#3b82f6" : "#9ca3af"})`,
+          }}
+        >
+          <p>{msg.text}</p>
+          <p className="text-xs mt-1 text-right">{msg.time}</p>
         </div>
+        {isUserMessage && (
+          <img
+            src={profileImage}
+            alt={name}
+            className="w-10 h-10 rounded-full ml-3"
+          />
+        )}
+      </div>
+    );
+  };
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto p-4">
+        {messages.map((msg) => renderMessage(msg))}
+      </div>
+      <div className="flex p-4 border-t border-gray-300">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          className="flex-1 p-2 border border-gray-300 rounded-lg"
+          placeholder="Yangi xabar yozing..."
+        />
+        <button
+          onClick={handleSendMessage}
+          className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
+        >
+          Yuborish
+        </button>
       </div>
     </div>
   );

@@ -13,21 +13,27 @@ import mes from "./mes.png";
 import set from "./set.png";
 import shop from "./shop.png";
 import logo from "../Menu_layout/img/aniDub_logo.png";
-import Chat from "./chat";
 
-type MenuItem = "Dashboard" | "Shop" | "Chat" | "Calendar" | "Settings";
+type MenuItem =
+  | "Dashboard"
+  | "Shop"
+  | "Chat"
+  | "Calendar"
+  | "Settings"
+  | "notifacions";
 
 interface Item {
   id: number;
   img: string;
   name: string;
   logo: string;
+  phone: string;
 }
 
 interface ChatMessage {
   userId: number;
   message: string;
-  timestamp: string;
+  timestamp?: number;
 }
 
 const Ad: React.FC = () => {
@@ -37,14 +43,28 @@ const Ad: React.FC = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [notifications, setNotifications] = useState<Item[]>([]);
+
+  const [count, setCount] = useState(0);
+
+  const apiLength = "";
 
   useEffect(() => {
-    const name = localStorage.getItem("name");
-    if (name) {
-      toast.success(`Xush kelibsiz, ${name}!`);
-    }
+    setCount(count + 1);
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(
+          `https://6d548820c3f18dbd.mokky.dev/access?api_length=${apiLength}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: Item[] = await response.json();
+        setNotifications(data);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -66,18 +86,15 @@ const Ad: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const savedMessages = localStorage.getItem("chatMessages");
-    if (savedMessages) {
-      setChatMessages(JSON.parse(savedMessages));
-    }
-  }, []);
-
   const handleMenuClick = (menuItem: MenuItem) => {
     setActiveMenu(menuItem);
     setSidebarOpen(false);
   };
 
+  const handleNotificationClick = () => {
+    setActiveMenu("notifacions");
+    setCount(0);
+  };
   const handleEdit = (id: number) => {
     console.log("Edit item with id:", id);
   };
@@ -97,19 +114,25 @@ const Ad: React.FC = () => {
     setSelectedImage(null);
   };
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const message: ChatMessage = {
-        userId: 1, // Replace with dynamic userId
-        message: newMessage,
-        timestamp: new Date().toLocaleTimeString(),
-      };
-      const updatedMessages = [...chatMessages, message];
-      setChatMessages(updatedMessages);
-      localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
-      setNewMessage("");
-    }
-  };
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(
+          "https://6d548820c3f18dbd.mokky.dev/access"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: Item[] = await response.json();
+        setNotifications(data);
+        const apiLength = data.length;
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   const renderContent = () => {
     switch (activeMenu) {
@@ -216,10 +239,58 @@ const Ad: React.FC = () => {
             </div>
           </div>
         );
+      case "notifacions":
+        return (
+          <div>
+            <h2 className="text-xl font-semibold mb-4">
+              Newly Registered Users
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 text-left text-sm md:text-base">
+                      ID
+                    </th>
+                    <th className="py-2 px-4 text-left text-sm md:text-base">
+                      Name
+                    </th>
+                    <th className="py-2 px-4 text-left text-sm md:text-base">
+                      Date Registered
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                      <tr key={notification.id} className="table_animation">
+                        <td className="py-2 px-4 text-sm md:text-base">
+                          {notification.id}
+                        </td>
+                        <td className="py-2 px-4 text-sm md:text-base">
+                          {notification.name}
+                        </td>
+                        <td className="py-2 px-4 text-sm md:text-base">
+                          {notification.phone}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="py-2 px-4 text-center">
+                        No notifications available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
       case "Shop":
         return <div>Shop Content</div>;
       case "Chat":
-        return <Chat />;
+        return;
       case "Calendar":
         return <div>Calendar Content</div>;
       case "Settings":
@@ -338,29 +409,24 @@ const Ad: React.FC = () => {
             }}
             className="flex items-center ms-4"
           >
-            <IconButton>
-              <span
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  borderRadius: "50%",
-                  backgroundColor: "red",
-                }}
-                className="absolute top-0 right-0 text-xs text-white font-bold"
-              >
-                3
-              </span>
+            <IconButton
+              onClick={handleNotificationClick}
+              className={count > 0 ? "user-icon" : ""}
+              aria-label="notifications"
+            >
               <img
                 style={{
-                  width: "36px",
-                  height: "36px",
+                  width: "42px",
+                  height: "42px",
                   borderRadius: "50%",
                   objectFit: "cover",
                 }}
                 src={qongiroq}
-                alt="Notification"
+                alt="Notifications"
               />
+              {count > 0 && <span>{count}</span>}
             </IconButton>
+
             <IconButton onClick={() => navigate("/profil")}>
               <img
                 style={{
