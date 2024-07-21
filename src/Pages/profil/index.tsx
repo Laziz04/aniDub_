@@ -11,14 +11,45 @@ import Component from "./components";
 import "./profil.css";
 import { GoPlus } from "react-icons/go";
 import { HiMiniXMark } from "react-icons/hi2";
-import { click } from "@testing-library/user-event/dist/click";
 import clik from "./clik.png";
 import payme from "./payme.png";
 import uzum from "./uzum.png";
 import hr from "./hr.png";
 import Chat from "../admen_page/chat";
+import gal from "./gal.png";
+import lov from "./lov.png";
+import tar from "./tar.png";
+import chat from "../admen_page/mes.png";
+import progil from "./progil.png";
 
 const Profil: React.FC = () => {
+  // profil img animatsiya
+
+  const [style, setStyle] = useState<React.CSSProperties>({});
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLImageElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (x - centerX) / 10;
+
+    setStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`,
+      boxShadow: `0px 20px 30px rgba(0, 0, 0, 0.3)`,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setStyle({
+      transform: "perspective(1000px) rotateX(0) rotateY(0) scale(1)",
+      boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
+      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    });
+  };
+
   const [value, setValue] = useState<string>("1");
   const [selectedImage, setSelectedImage] = useState<string>(
     localStorage.getItem("selectedImage") ||
@@ -61,7 +92,8 @@ const Profil: React.FC = () => {
     images: [
       {
         id: 1,
-        src: "https://wallpapersmug.com/large/058c6f/a-world-full-of-red.jpg",
+        src:
+          "https://e0.pxfuel.com/wallpapers/891/860/desktop-wallpaper-animal-black-hair-butterfly-flowers-forest-fox-japanese-clothes.jpg",
       },
       {
         id: 2,
@@ -75,17 +107,46 @@ const Profil: React.FC = () => {
       {
         id: 4,
         src:
-          "https://img.freepik.com/premium-photo/scenic-cherry-blossom-garden-with-pagoda-by-sea-with-mountains-silhouet-generative-ai_272168-10218.jpg",
+          "https://e0.pxfuel.com/wallpapers/578/527/desktop-wallpaper-blue-sky-and-clouds.jpg",
       },
       {
         id: 5,
         src:
-          "https://img.freepik.com/premium-photo/painting-tree-middle-lake-generative-ai_900370-31.jpg",
+          "https://wp-top.ru/wp-content/uploads/2023/10/wp-top.ru-9823560-.ru-anime_pejzazh-anime-pejzazhnaya_zhivopis-art-peyzash-3840x2160-1-870x400.jpg",
+      },
+
+      {
+        id: 6,
+        src:
+          "https://i.pinimg.com/originals/16/9e/e4/169ee4b37b2544ebd87d23b695bf0a66.jpg",
+      },
+
+      {
+        id: 7,
+        src:
+          "https://e1.pxfuel.com/desktop-wallpaper/222/208/desktop-wallpaper-old-anime-s-full-anime.jpg",
+      },
+
+      {
+        id: 8,
+        src: "https://images2.alphacoders.com/999/999786.jpg",
+      },
+
+      {
+        id: 9,
+        src:
+          "https://i.pinimg.com/originals/15/81/22/158122c9dade3b025c2845396a1eb411.jpg",
+      },
+      {
+        id: 10,
+        src:
+          "https://i.pinimg.com/originals/8f/97/8b/8f978bcdf5316b646d96f8c85d9147c3.jpg",
       },
     ],
   };
 
   const name = localStorage.getItem("name") || "User";
+
   const storedPhone = localStorage.getItem("phone");
   const [openModal, setOpenModal] = useState(false);
   const [openModalsend, setOpenModalsend] = useState(false);
@@ -96,6 +157,7 @@ const Profil: React.FC = () => {
   const [balans, setBalans] = useState("0 So'm");
   const [balance, setBalance] = useState(0);
   const [openModalmoney, setOpenModalmoney] = useState(false);
+  localStorage.setItem("balance", balans);
 
   const handleCloseModalmoney = () => {
     setOpenModalmoney(false);
@@ -125,7 +187,7 @@ const Profil: React.FC = () => {
     if (balance <= 0) {
       toast.error("Obuna bo'lish uchun balansda mablag' yetarli emas");
     } else {
-      toast.success("Obuna muvaffaqiyatli bo'ldi!");
+      toast.success("Tabriklaymiz siz  1 oylik tarif sotib oldinggiz");
     }
   };
 
@@ -168,7 +230,7 @@ const Profil: React.FC = () => {
   };
 
   return (
-    <Box className="p-5">
+    <Box className=" pe-5 ps-5 pt-2">
       <Box
         sx={{
           borderRadius: "20px",
@@ -209,13 +271,10 @@ const Profil: React.FC = () => {
             >
               <img
                 onClick={handleOpenModal}
-                className="shadow-lg profil_logo hover:transform hover:scale-110 transition-transform duration-300"
-                style={{
-                  borderRadius: "50%",
-                  width: "80px",
-                  height: "80px",
-                  cursor: "pointer",
-                }}
+                className="profil_logo shadow-lg rounded-full cursor-pointer transition-transform duration-300"
+                style={{ ...style, width: "80px", height: "80px" }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
                 src={selectedProfilImage}
                 alt="User"
               />
@@ -254,15 +313,120 @@ const Profil: React.FC = () => {
                     right: "10px",
                   }}
                 >
-                  <Tab label="Profil" value="1" />
-                  <Tab label="Chat" value="2" />
-                  <Tab label="Tariflar" value="3" />
-                  <Tab label="Sevimlilar" value="4" />
-                  <Tab label="Galeriya" value="5" />
+                  <Tab
+                    label={
+                      <div className=" flex gap-1 items-center">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            transform: isEditingName
+                              ? "scale(1.1)"
+                              : "scale(1)",
+                          }}
+                          src={progil}
+                          alt=""
+                        />
+                        Profil
+                      </div>
+                    }
+                    value="1"
+                  />
+                  <Tab
+                    label={
+                      <div className=" flex gap-1 items-center">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            transform: isEditingName
+                              ? "scale(1.1)"
+                              : "scale(1)",
+                          }}
+                          src={chat}
+                          alt=""
+                        />
+                        Chat
+                      </div>
+                    }
+                    value="2"
+                  />
+                  <Tab
+                    label={
+                      <div className=" flex gap-1 items-center">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            transform: isEditingName
+                              ? "scale(1.1)"
+                              : "scale(1)",
+                          }}
+                          src={tar}
+                          alt=""
+                        />
+                        Tariflar
+                      </div>
+                    }
+                    value="3"
+                  />
+                  <Tab
+                    label={
+                      <div className=" flex gap-1 items-center">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            transform: isEditingName
+                              ? "scale(1.1)"
+                              : "scale(1)",
+                          }}
+                          src={lov}
+                          alt=""
+                        />
+                        Sevimlilar
+                      </div>
+                    }
+                    value="4"
+                  />
+                  <Tab
+                    label={
+                      <div className=" flex gap-1 items-center">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            cursor: "pointer",
+                            transform: isEditingName
+                              ? "scale(1.1)"
+                              : "scale(1)",
+                          }}
+                          src={gal}
+                          alt=""
+                        />
+                        Galeriya
+                      </div>
+                    }
+                    value="5"
+                  />
                 </TabList>
               </Box>
               <TabPanel value="1">
-                <Box className="flex gap-2 items-center">
+                <Box
+                  sx={{
+                    marginTop: "10px",
+                  }}
+                  className="flex gap-2 items-center"
+                >
                   <Box
                     className="boxShadow"
                     sx={{
@@ -521,42 +685,47 @@ const Profil: React.FC = () => {
       {/* obuna bolsih modal */}
 
       <Modal
-        style={{
-          marginTop: "220px",
-        }}
         show={openModalsend}
         onHide={handleCloseModalset}
+        className="fixed inset-0 flex items-center justify-center z-50"
+        backdropClassName="custom-backdrop"
+        dialogClassName="custom-dialog"
+        style={{
+          marginTop: "50px",
+        }}
       >
         <div
           style={{
-            width: "390px",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            padding: "20px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            width: "380px",
           }}
+          className=" max-w-lg bg-white rounded-2xl p-6 shadow-xl animate-modal-entry"
         >
-          <div className="flex justify-between items-center w-full">
-            <h5 className="text-start">Obuna Bo'lishni tasdiqlang</h5>
+          <div className="flex justify-between items-center w-full border-b pb-3 mb-4">
+            <h5 className="text-xl font-semibold text-gray-800">
+              Obuna Bo'lishni tasdiqlang
+            </h5>
             <button
               onClick={handleCloseModalset}
-              className="text-teal-500 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
+              className="text-gray-500 hover:text-red-500 transition-colors"
             >
-              <HiMiniXMark
-                style={{
-                  fontSize: "22px",
-                  cursor: "pointer",
-                }}
-              />
+              <HiMiniXMark className="text-2xl cursor-pointer" />
             </button>
           </div>
-          <div className="flex flex-col gap-3 mt-4 justify-center">
-            <button className="button-3d w-full" onClick={handleCloseModalset}>
-              Bekor qilish
-            </button>
-            <button onClick={handleSubscription} className="button-3d w-full">
-              Obuna Bo'lish
-            </button>
+          <div className="mt-4">
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={handleCloseModalset}
+                className="w-full bg-gradient-to-r from-blue-500 to-white text-white py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-200 transition duration-300"
+              >
+                Bekor qilish
+              </button>
+              <button
+                onClick={handleSubscription}
+                className="w-full bg-gradient-to-r from-blue-500 to-white text-white py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-200 transition duration-300"
+              >
+                Obuna Bo'lish
+              </button>
+            </div>
           </div>
         </div>
       </Modal>

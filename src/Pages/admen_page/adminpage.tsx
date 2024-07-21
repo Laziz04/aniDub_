@@ -14,13 +14,7 @@ import set from "./set.png";
 import shop from "./shop.png";
 import logo from "../Menu_layout/img/aniDub_logo.png";
 
-type MenuItem =
-  | "Dashboard"
-  | "Shop"
-  | "Chat"
-  | "Calendar"
-  | "Settings"
-  | "notifacions";
+type MenuItem = "Dashboard" | "Shop" | "Users" | "Settings" | "users";
 
 interface Item {
   id: number;
@@ -28,12 +22,8 @@ interface Item {
   name: string;
   logo: string;
   phone: string;
-}
-
-interface ChatMessage {
-  userId: number;
-  message: string;
-  timestamp?: number;
+  description?: string; // Optional field
+  views?: number; // Optional field
 }
 
 const Ad: React.FC = () => {
@@ -44,28 +34,16 @@ const Ad: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notifications, setNotifications] = useState<Item[]>([]);
-
-  const [count, setCount] = useState(0);
-
-  const apiLength = "";
-
-  useEffect(() => {
-    setCount(count + 1);
-    const fetchNotifications = async () => {
-      try {
-        const response = await fetch(
-          `https://6d548820c3f18dbd.mokky.dev/access?api_length=${apiLength}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data: Item[] = await response.json();
-        setNotifications(data);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
-  }, []);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    img: "",
+    name: "",
+    description: "",
+    views: 0,
+  });
+  const [currentItemId, setCurrentItemId] = useState<number | null>(null);
+  const name = localStorage.getItem("name");
+  const profilimg = localStorage.getItem("selectedProfilImage");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +58,7 @@ const Ad: React.FC = () => {
         setData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        toast.error("Failed to fetch data");
       }
     };
 
@@ -91,17 +70,23 @@ const Ad: React.FC = () => {
     setSidebarOpen(false);
   };
 
-  const handleNotificationClick = () => {
-    setActiveMenu("notifacions");
-    setCount(0);
-  };
-  const handleEdit = (id: number) => {
-    console.log("Edit item with id:", id);
-  };
-
-  const handleDelete = (id: number) => {
-    console.log("Delete item with id:", id);
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(
+        `https://6d548820c3f18dbd.mokky.dev/Cards/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      setData(data.filter((item) => item.id !== id));
+      toast.success("anime muvaffaqiyatli o'chirildi");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Failed to delete item");
+    }
   };
 
   const handleImageClick = (imgSrc: string) => {
@@ -125,14 +110,90 @@ const Ad: React.FC = () => {
         }
         const data: Item[] = await response.json();
         setNotifications(data);
-        const apiLength = data.length;
       } catch (error) {
         console.error("Error fetching notifications:", error);
+        toast.error("Failed to fetch notifications");
       }
     };
 
     fetchNotifications();
   }, []);
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditFormData((prev) => ({
+          ...prev,
+          img: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSave = async () => {
+    if (currentItemId !== null) {
+      try {
+        const edit = await fetch(
+          `https://6d548820c3f18dbd.mokky.dev/Cards/${currentItemId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editFormData),
+          }
+        );
+        if (!edit.ok) {
+          const erroredit = await edit.text();
+          throw new Error(`Failed to update item: ${erroredit}`);
+        }
+
+        // Verify the response
+        const updatedData = await edit.json();
+        console.log("Updated Data:", updatedData);
+
+        // Update local state or refetch data
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.id === currentItemId ? updatedData : item
+          )
+        );
+        toast.success("Item updated successfully");
+      } catch (error) {
+        console.error("Error updating item:", error);
+        toast.error("Failed to update item");
+      } finally {
+        setIsEditModalOpen(false);
+        setCurrentItemId(null); // Reset currentItemId
+      }
+    }
+  };
+  const handleEdit = (id: number) => {
+    const itemToEdit = data.find((item) => item.id === id);
+    if (itemToEdit) {
+      setEditFormData({
+        img: itemToEdit.img,
+        name: itemToEdit.name,
+        description: itemToEdit.description || "",
+        views: itemToEdit.views || 0,
+      });
+      setCurrentItemId(id);
+      setIsEditModalOpen(true);
+    } else {
+      console.error("Item to edit not found:", id);
+    }
+  };
 
   const renderContent = () => {
     switch (activeMenu) {
@@ -161,11 +222,14 @@ const Ad: React.FC = () => {
               }}
               className="bg-white p-6 shadow"
             >
-              <h2 className="text-xl font-semibold mb-4">
-                <span>An</span>imelar
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
+              <div className=" flex justify-between items-center">
+                <h2 className="text-xl font-semibold mb-4">
+                  <span>An</span>imelar
+                </h2>
+                <button>Creat anime</button>
+              </div>
+              <div className="overflow-x-auto" style={{ height: "330px" }}>
+                <table className="min-w-full" style={{ width: "100%" }}>
                   <thead>
                     <tr>
                       <th className="py-2 px-4 text-left text-sm md:text-base">
@@ -174,25 +238,20 @@ const Ad: React.FC = () => {
                       <th className="py-2 px-4 text-left text-sm md:text-base">
                         Name
                       </th>
+                      <th className="py-2 px-4 text-left text-sm md:text-base"></th>
                       <th className="py-2 px-4 text-left text-sm md:text-base">
-                        Logo
-                      </th>
-                      <th className="py-2 px-4 text-left text-sm md:text-base">
-                        Edit
-                      </th>
-                      <th className="py-2 px-4 text-left text-sm md:text-base">
-                        Delete
+                        wiev
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.length > 0 ? (
                       data.map((item) => (
-                        <tr key={item.id} className="table_animation">
+                        <tr key={item.id} className="">
                           <td className="py-2 px-4">
                             <img
                               onClick={() => handleImageClick(item.img)}
-                              style={{ borderRadius: "10%" }}
+                              style={{ borderRadius: "50%" }}
                               src={item.img}
                               alt={`${item.name} image`}
                               className="w-16 h-16 object-cover cursor-pointer"
@@ -201,29 +260,25 @@ const Ad: React.FC = () => {
                           <td className="py-2 px-4 text-blue-600 text-sm md:text-base">
                             {item.name}
                           </td>
-                          <td className="py-2 px-4">
-                            <img
-                              src={item.logo}
-                              alt={`${item.name} logo`}
-                              className="w-16 h-16 object-cover"
-                            />
-                          </td>
-                          <td className="py-2 px-4">
-                            <button
-                              onClick={() => handleEdit(item.id)}
-                              className="text-blue-500 hover:text-blue-700 text-sm md:text-base"
-                            >
-                              Edit
-                            </button>
-                          </td>
-                          <td className="py-2 px-4">
-                            <button
-                              onClick={() => handleDelete(item.id)}
-                              className="text-red-500 hover:text-red-700 text-sm md:text-base"
-                            >
-                              Delete
-                            </button>
-                          </td>
+                          <td></td>
+                          <div>
+                            <td className="py-2 px-4">
+                              <button
+                                onClick={() => handleEdit(item.id)}
+                                className="text-blue-500 hover:text-blue-700 text-sm md:text-base"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                            <td className="py-2 px-4">
+                              <button
+                                onClick={() => handleDelete(item.id)}
+                                className="text-red-500 hover:text-red-700 text-sm md:text-base"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </div>
                         </tr>
                       ))
                     ) : (
@@ -239,14 +294,14 @@ const Ad: React.FC = () => {
             </div>
           </div>
         );
-      case "notifacions":
+      case "users":
         return (
           <div>
             <h2 className="text-xl font-semibold mb-4">
               Newly Registered Users
             </h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
+            <div className="overflow-x-auto p-10" style={{ height: "580px" }}>
+              <table className="min-w-full" style={{ width: "100%" }}>
                 <thead>
                   <tr>
                     <th className="py-2 px-4 text-left text-sm md:text-base">
@@ -260,10 +315,17 @@ const Ad: React.FC = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody
+                  className="min-w-full flex gap-1"
+                  style={{ width: "100%", flexDirection: "column" }}
+                >
                   {notifications.length > 0 ? (
                     notifications.map((notification) => (
-                      <tr key={notification.id} className="table_animation">
+                      <tr
+                        style={{ width: "100%" }}
+                        key={notification.id}
+                        className="table_animation my-2 flex justify-between min-w-full"
+                      >
                         <td className="py-2 px-4 text-sm md:text-base">
                           {notification.id}
                         </td>
@@ -289,10 +351,8 @@ const Ad: React.FC = () => {
         );
       case "Shop":
         return <div>Shop Content</div>;
-      case "Chat":
-        return;
-      case "Calendar":
-        return <div>Calendar Content</div>;
+      case "Users":
+        return <div>{/* <Message /> */}</div>;
       case "Settings":
         return <div>Settings Content</div>;
       default:
@@ -309,12 +369,14 @@ const Ad: React.FC = () => {
       >
         <div className="flex flex-col h-full">
           <img
+            onClick={() => navigate("/Profil")}
             style={{
-              width: "130px",
+              width: "120px",
+              cursor: "pointer",
+              marginBottom: "40px",
             }}
             src={logo}
             alt="Logo"
-            className="w-full mb-4"
           />
           <nav className="flex-1">
             <ul className=" p-0">
@@ -346,22 +408,19 @@ const Ad: React.FC = () => {
               </li>
               <li className="mb-4">
                 <button
-                  onClick={() => handleMenuClick("Chat")}
+                  onClick={() => handleMenuClick("users")}
                   className="button flex items-center space-x-2"
                 >
-                  <img src={mes} alt="Chat" />
+                  <img src={user} alt="users" />
                   <span
                     className={`${sidebarOpen ? "block" : "hidden md:block"}`}
                   >
-                    Chat
+                    Users
                   </span>
                 </button>
               </li>
               <li className="mb-4">
-                <button
-                  onClick={() => handleMenuClick("Calendar")}
-                  className="button flex items-center space-x-2"
-                >
+                <button className="button flex items-center space-x-2">
                   <img src={cal} alt="Calendar" />
                   <span
                     className={`${sidebarOpen ? "block" : "hidden md:block"}`}
@@ -402,18 +461,14 @@ const Ad: React.FC = () => {
         />
       </button>
       <div className="flex-1 p-8 bg-gray-100">
-        <header className="flex justify-between items-center mb-6">
+        <header className="flex justify-between  mb-6">
           <div
             style={{
               marginTop: "-20px",
             }}
             className="flex items-center ms-4"
           >
-            <IconButton
-              onClick={handleNotificationClick}
-              className={count > 0 ? "user-icon" : ""}
-              aria-label="notifications"
-            >
+            <IconButton className="user-icon" aria-label="notifications">
               <img
                 style={{
                   width: "42px",
@@ -424,25 +479,118 @@ const Ad: React.FC = () => {
                 src={qongiroq}
                 alt="Notifications"
               />
-              {count > 0 && <span>{count}</span>}
             </IconButton>
+          </div>
 
-            <IconButton onClick={() => navigate("/profil")}>
+          <div className=" flex gap-3 ">
+            <div
+              style={{
+                border: "3px solid #00d3e1",
+                borderRadius: "50%",
+                padding: "3px",
+                objectFit: "cover",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "-20px",
+              }}
+            >
               <img
+                onClick={() => navigate("/profil")}
                 style={{
-                  width: "28px",
-                  height: "28px",
+                  cursor: "pointer",
                   borderRadius: "50%",
+                  width: "42px",
+                  height: "42px",
                   objectFit: "cover",
                 }}
-                src={user}
-                alt="User"
+                src={profilimg || "default-image-url"}
+                alt="Profile image"
+                className="profile-image"
+                loading="lazy"
               />
-            </IconButton>
+            </div>
+
+            <span>{name}</span>
           </div>
         </header>
 
         {renderContent()}
+
+        {isEditModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+            <div className="p-4 bg-white rounded-lg shadow-lg relative">
+              <h2 className="text-xl font-semibold mb-4">Edit Item</h2>
+              <form>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Image
+                  </label>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="form-input"
+                  />
+                  {editFormData.img && (
+                    <img
+                      src={editFormData.img}
+                      alt="Preview"
+                      className="w-24 h-24 object-cover mt-2"
+                    />
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={editFormData.name}
+                    onChange={handleFormChange}
+                    className="form-input"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={editFormData.description}
+                    onChange={handleFormChange}
+                    className="form-input"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Views
+                  </label>
+                  <input
+                    type="number"
+                    name="views"
+                    value={editFormData.views}
+                    onChange={handleFormChange}
+                    className="form-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded ml-2"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
 
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">

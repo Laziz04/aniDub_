@@ -74,3 +74,45 @@
   border-radius: 15px 0px 0px 0px;
   opacity: 0px;
 }
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.custom-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animate-modal-entry {
+  animation: modalEntry 0.4s ease-out;
+}
+
+@keyframes modalEntry {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* CustomStyles.css */
+.gallery-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.relative {
+  perspective: 1000px;
+}
+/* CustomStyles.css */
+.profil_logo {
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.relative {
+  perspective: 1000px;
+}

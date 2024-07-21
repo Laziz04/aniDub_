@@ -1,7 +1,7 @@
 .section_card {
   position: relative;
-  width: 220px;
-  height: 320px;
+  width: 200px;
+  height: 280px;
   overflow: hidden;
   border-radius: 7px;
   transition: transform 0.3s ease;

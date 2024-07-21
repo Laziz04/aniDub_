@@ -1,31 +1,58 @@
-import { FaChevronRight } from "react-icons/fa";
-import "./section_filter.css";
-import { Box } from "@mui/material";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { Card, Container } from "react-bootstrap";
+import Chat from "../admen_page/chat";
+import Cards from "../cards";
 
 const Filter = () => {
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
   return (
-    <Box className=" mt-14 respon">
-      <div
-        style={{
-          flexWrap: "wrap",
+    <Container
+      style={{
+        position: "relative",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          typography: "body1",
         }}
-        className=" flex items-center gap-3 justify-between "
       >
-        <div
-          style={{
-            flexWrap: "wrap",
-          }}
-          className="flex gap-3 "
-        >
-          <button className=" Filter_button">Ani Filimlar</button>
-          <button className=" Filter_button">Barcha anemelar</button>
-          <button className=" Filter_button">Yakunlangan Animelar</button>
-        </div>
-        <button className="flex items-center gap-1 Filter_button1">
-          Barchasi <FaChevronRight />
-        </button>
-      </div>
-    </Box>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", border: "none" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+              <TabList onChange={handleChange}>
+                <Tab
+                  style={{
+                    border: "none",
+                  }}
+                  label="Barcha animelar"
+                  value="1"
+                />
+                <Tab label="Mangalar" value="2" />
+                <Tab label="Chat" value="3" />
+              </TabList>
+            </Box>
+          </Box>
+          <TabPanel value="1">
+            <Cards />
+          </TabPanel>
+          <TabPanel value="2">Mangalar</TabPanel>
+          <TabPanel value="3">
+            <Chat name="" profileImage="" />
+          </TabPanel>
+        </TabContext>
+      </Box>
+    </Container>
   );
 };
 

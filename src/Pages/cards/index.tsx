@@ -44,7 +44,7 @@ const Cards: React.FC = () => {
   return (
     <div>
       <section className="container mt-5">
-        <div className=" row  gap-5 justify-center">
+        <div className=" row  gap-5 justify-center w-full">
           {error && <div>Error: {error}</div>}
           {products.map((product) => (
             <div
