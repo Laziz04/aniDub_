@@ -44,5 +44,3 @@ const ContactUs: React.FC = () => {
     </form>
   );
 };
-
-export default ContactUs;

@@ -6,9 +6,11 @@
   -moz-box-shadow: 0px 1px 10px -2px rgba(34, 60, 80, 0.2) inset;
   box-shadow: 0px 1px 10px -2px rgba(34, 60, 80, 0.2) inset;
   border-radius: 18px;
-  border: 1px solid rgb(204, 200, 200);
+  border: 1px solid rgb(0, 155, 222);
   margin-right: 10px;
   padding-left: 20px !important;
+  color: white;
+  background-image: url("https://i.pinimg.com/736x/ce/09/a1/ce09a1b33b34bb46858d471205d46d8c.jpg");
 }
 
 .input_style {
@@ -47,12 +49,37 @@
 
 @media screen and (max-width: 1900px) {
   .respons {
-    padding: 0px 48px 0px 56px;
+    padding: 0px 28px 0px 36px;
   }
 }
 
 @media screen and (max-width: 1000px) {
   .respons {
-    padding: 0px 12px 0px 18px;
+    padding: 0px 0px 0px 0px;
   }
+}
+
+@media screen and (max-width: 400px) {
+  .respons {
+    padding: 0px 0px 0px 0px;
+  }
+}
+/* styles.css */
+
+.bg_fg_flter {
+  backdrop-filter: blur(10px);
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* Animatsiya qo‘shish */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.search_conytainer {
 }

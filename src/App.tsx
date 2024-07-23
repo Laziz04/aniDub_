@@ -17,7 +17,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "@mui/material";
 import Navbar from "./Pages/Menu_layout/index";
 import Profil from "./Pages/profil/index";
-import ContactUs from "./Pages/Menu_layout/sms";
 
 function App() {
   const location = useLocation();
@@ -39,7 +38,7 @@ function App() {
               <>
                 <Animation />
                 <Filter />
-                {/* <Cards /> */}
+                <Cards />
                 {/* <Container>
                   <News />
                   <Footer />

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./cards.css";
 import { FaHeart, FaRegEye } from "react-icons/fa";
 import axios, { AxiosResponse } from "axios";
-import { wrap } from "module";
-import { Alert } from "react-bootstrap";
 import { BiSolidLike } from "react-icons/bi";
 
 interface Product {
@@ -42,48 +40,45 @@ const Cards: React.FC = () => {
     alert("Click to purchase product to purchase a new product ");
   };
   return (
-    <div>
-      <section className="container mt-5">
-        <div className=" row  gap-5 justify-center w-full">
-          {error && <div>Error: {error}</div>}
-          {products.map((product) => (
-            <div
-              className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mt-2 Ser_card"
-              key={product.id}
-            >
-              <div className="section_card">
-                <div className="span_container">
-                  <span className="card_span">{product.data}</span>
-                  <span className="card_span2">
-                    <FaHeart />
-                  </span>
+    <div className="container mx-auto mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 justify-center">
+        {error && <div className="col-span-full">Error: {error}</div>}
+        {products.map((product) => (
+          <div
+            className="col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mt-2 Ser_card"
+            key={product.id}
+          >
+            <div className="section_card">
+              <div className="span_container">
+                <span className="card_span">{product.data}</span>
+                <span className="card_span2">
+                  <FaHeart />
+                </span>
+              </div>
+              <img
+                src={product.img}
+                alt="Card image"
+                className="card-image w-full h-auto"
+              />
+              <div className="card-body">
+                <p className="card-text">{product.name}</p>
+                <div className="card_span3 flex gap-1 items-center">
+                  <FaRegEye />
+                  <span id="Ko'rishlar_soni">{product.views}</span>
                 </div>
-                <img
-                  src={product.img}
-                  alt="Card image"
-                  className="card-image"
-                />
-                <div className="card-body">
-                  <p className="card-text">{product.name}</p>
-
-                  <div className="card_span3 flex gap-1 items-center">
-                    <FaRegEye />
-                    <span id="Ko'rishlar_soni">{product.views}</span>
-                  </div>
-                  <BiSolidLike className="card_span4" />
-                </div>
+                <BiSolidLike className="card_span4" />
               </div>
             </div>
-          ))}
-        </div>
-        <div className="flex justify-center mt-5">
-          <div className="flex justify-center mt-3">
-            <button className="buuton_hover" onClick={handleClick}>
-              Koproq ko'rsatish
-            </button>
           </div>
+        ))}
+      </div>
+      <div className="flex justify-center mt-5">
+        <div className="flex justify-center mt-3">
+          <button className="buuton_hover" onClick={handleClick}>
+            Koproq ko'rsatish
+          </button>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

@@ -1,58 +1,30 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import { Card, Container } from "react-bootstrap";
-import Chat from "../admen_page/chat";
-import Cards from "../cards";
+import { FaChevronRight } from "react-icons/fa";
+import "./section_filter.css";
 
 const Filter = () => {
-  const [value, setValue] = React.useState("1");
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
   return (
-    <Container
-      style={{
-        position: "relative",
-      }}
-    >
-      <Box
-        sx={{
-          width: "100%",
-          typography: "body1",
-        }}
-      >
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider", border: "none" }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-              <TabList onChange={handleChange}>
-                <Tab
-                  style={{
-                    border: "none",
-                  }}
-                  label="Barcha animelar"
-                  value="1"
-                />
-                <Tab label="Mangalar" value="2" />
-                <Tab label="Chat" value="3" />
-              </TabList>
-            </Box>
-          </Box>
-          <TabPanel value="1">
-            <Cards />
-          </TabPanel>
-          <TabPanel value="2">Mangalar</TabPanel>
-          <TabPanel value="3">
-            <Chat name="" profileImage="" />
-          </TabPanel>
-        </TabContext>
-      </Box>
-    </Container>
+    <div className="container mx-auto mt-3">
+      <div className="flex flex-wrap justify-between items-center w-full">
+        <div className="w-full md:w-auto flex flex-wrap justify-center md:justify-start">
+          <div className="p-1">
+            <button className="Filter_button ">Barcha animelar</button>
+          </div>
+          <div className="w-full md:w-1/3 p-1">
+            <button className="Filter_button w-full">
+              Yakunlangan Animelar
+            </button>
+          </div>
+          <div className="w-full md:w-1/3 p-1">
+            <button className="Filter_button w-full">Ani Filimlar</button>
+          </div>
+        </div>
+        <div className="w-full md:w-auto mt-2 md:mt-0">
+          <button className="flex items-center gap-1 Filter_button1 w-full md:w-auto">
+            Barchasi <FaChevronRight />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
