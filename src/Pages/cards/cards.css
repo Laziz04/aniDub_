@@ -127,25 +127,75 @@
 }
 
 @media screen and (max-width: 1900px) {
-  .respons {
-    padding: 0px 48px 0px 56px;
+  .pons {
+    padding: 0px 60px 0px 60px;
   }
 }
 
 @media screen and (max-width: 1000px) {
-  .respons {
+  .pons {
     padding: 0px 12px 0px 18px;
   }
 }
 
 @media screen and (max-width: 759px) {
-  .respons {
-    padding: 0px 0px 0px 100px;
+  .pons {
+    padding: 0px 0px 0px 0px;
   }
 }
 
 @media screen and (max-width: 500px) {
-  .respons {
-    padding: 0px 0px 0px 105px;
+  .pons {
+    padding: 0px 10px 0px 10px;
   }
+
+  .section_card {
+    width: 180px;
+    height: 260px;
+  }
+}
+
+.never {
+  gap: 30px;
+}
+@media screen and (max-width: 360px) {
+  .pons {
+    padding: 0px 0px 0px 0px !important;
+  }
+
+  .section_card {
+    width: 150px;
+    height: 230px;
+  }
+  .never {
+    gap: 10px;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Rasm cattalashganda animatsiya */
+  }
+}
+
+/* cards.css */
+.fade-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 500ms, transform 500ms;
+}
+.fade-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 500ms, transform 500ms;
 }
